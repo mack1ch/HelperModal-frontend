@@ -7,8 +7,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useCookies } from "react-cookie";
 import { uid } from "uid";
-import useSWR from "swr";
-import { fetcher } from "@/shared/api/restAPI";
 import { IIssue } from "@/shared/interface/issue";
 import { closeOldIssues } from "../model";
 import { changeIssueClosingByID, getIssuesByAuthorID } from "../api";
@@ -104,17 +102,19 @@ export const Messenger = () => {
       <div className={styles.messenger}>
         <MessagesRender issues={issues} />
         <form className={styles.form} onSubmit={onSubmit}>
-          <TextArea
-            autoSize
+          <Input.Search
             value={messageValue}
+            onSearch={() => onSubmit}
+            enterButton={
+              <button onClick={onSubmit} className={styles.submitButton}>
+                <Image src={PlaneTilt} width={24} height={24} alt="Submit" />
+              </button>
+            }
             onChange={(e) => setMessageValue(e.target.value)}
             size="large"
             placeholder="Задайте свой вопрос"
             variant="borderless"
           />
-          <button onClick={onSubmit} className={styles.submitButton}>
-            <Image src={PlaneTilt} width={24} height={24} alt="Submit" />
-          </button>
         </form>
       </div>
     </>

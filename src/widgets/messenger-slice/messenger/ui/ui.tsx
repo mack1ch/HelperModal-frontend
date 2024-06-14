@@ -16,7 +16,6 @@ const socket = io(`https://helper.unisport.space/`);
 
 export const Messenger = () => {
   const [cookies] = useCookies(["user-id"]);
-  console.log(cookies);
   const [messageValue, setMessageValue] = useState<string>("");
   const [issues, setIssues] = useState<IIssue[]>();
   useEffect(() => {
@@ -93,9 +92,40 @@ export const Messenger = () => {
         isQuestion: true,
       });
     }
+    setIssues((prevIssues) => {
+      if (!prevIssues || prevIssues.length === 0) {
+        return prevIssues;
+      }
+
+      const updatedIssues = [...prevIssues];
+      const lastIssue = updatedIssues[updatedIssues.length - 1];
+
+      if (lastIssue.messages) {
+        lastIssue.messages.push({
+          id: "",
+          text: messageValue,
+          issueId: lastIssue.issueId,
+          authorId: lastIssue.authorId,
+        } as IMessage);
+      } else {
+        lastIssue.messages = [
+          {
+            id: "",
+            text: messageValue,
+            issueId: lastIssue.issueId,
+            authorId: lastIssue.authorId,
+          } as IMessage,
+        ];
+      }
+
+      return updatedIssues;
+    });
     setMessageValue("");
   }
-
+  // text: string;
+  // authorId: string;
+  // issueId: string;
+  // createdAt: Date;
   return (
     <>
       <div className={styles.messenger}>

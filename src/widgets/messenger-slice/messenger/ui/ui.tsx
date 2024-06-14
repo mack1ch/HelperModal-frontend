@@ -16,6 +16,7 @@ const socket = io(`https://helper.unisport.space/`);
 
 export const Messenger = () => {
   const [cookies] = useCookies(["user-id"]);
+
   const [messageValue, setMessageValue] = useState<string>("");
   const [issues, setIssues] = useState<IIssue[]>();
   useEffect(() => {
@@ -122,14 +123,14 @@ export const Messenger = () => {
     });
     setMessageValue("");
   }
-  // text: string;
-  // authorId: string;
-  // issueId: string;
-  // createdAt: Date;
+
   return (
     <>
       <div className={styles.messenger}>
-        <MessagesRender issues={issues} />
+       
+        <div className={styles.messagesContainer}>
+          <MessagesRender issues={issues} />
+        </div>
         <form className={styles.form} onSubmit={onSubmit}>
           <Input.Search
             value={messageValue}

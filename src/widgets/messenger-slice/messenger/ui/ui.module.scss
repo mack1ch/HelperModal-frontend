@@ -3,13 +3,22 @@
   flex-direction: column;
   width: 100%;
   height: 100vh;
+
+  .messagesContainer {
+    flex: 1; /* Занимает оставшуюся высоту */
+    overflow-y: auto; /* Добавляет вертикальную прокрутку */
+    padding-bottom: 48px;
+    padding-top: 78px;
+  }
   .form {
     border-top: 2px solid #ebebeb;
-    margin-top: auto;
-    margin-bottom: 4px;
     display: flex;
     align-items: flex-end;
     width: 100%;
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    padding: 10px; /* Добавьте отступы для удобства */
 
     .submitButton {
       border: none;

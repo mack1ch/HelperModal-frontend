@@ -15,6 +15,7 @@ export default function Home() {
     <>
       <AppLayout>
         <Header
+          style={{ position: "fixed" }}
           leftIcon={
             <IconWrap onClick={() => router.back()} image={CaretLeft} />
           }

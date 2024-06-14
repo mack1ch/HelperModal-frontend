@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   flex-direction: column;
-
+  overflow-y: auto;
   .date {
     font-size: 14px;
     margin: 5px 0;

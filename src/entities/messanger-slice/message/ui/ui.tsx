@@ -7,7 +7,7 @@ import { useState } from "react";
 import { formatTimeToHHMMFormat } from "@/shared/lib/parce/time";
 
 export const Message = ({ message }: { message?: IMessage }) => {
-  const [cookies, setCookie] = useCookies(["user-id"]);
+  const [cookies] = useCookies(["user-id"]);
   const [isHover, setIsHover] = useState<boolean>(false);
   const isMessageMine: boolean = message?.authorId === cookies["user-id"];
   return (

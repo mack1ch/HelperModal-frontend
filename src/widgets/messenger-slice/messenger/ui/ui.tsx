@@ -12,7 +12,6 @@ import { closeOldIssues } from "../model";
 import { changeIssueClosingByID, getIssuesByAuthorID } from "../api";
 import { IMessage } from "@/shared/interface/message";
 
-const { TextArea } = Input;
 
 const socket = io(`https://helper.unisport.space/`);
 

@@ -22,12 +22,6 @@
       cursor: pointer;
       transition: all 0.2s;
       border-radius: 4px;
-      &:hover {
-        background-color: #ebebeb;
-      }
-      &:active {
-        background-color: #f9f9f9;
-      }
     }
   }
 }

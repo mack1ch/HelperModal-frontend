@@ -77,7 +77,7 @@ export const Messenger = () => {
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
-    if (issues && issues.length > 0) {
+    if (issues && issues.length > 0 && messageValue.length > 0) {
       socket.emit("sendMessage", {
         issueId: issues[issues?.length - 1].isClosed
           ? uid(16)
@@ -86,7 +86,7 @@ export const Messenger = () => {
         authorId: cookies["user-id"],
         isQuestion: true,
       });
-    } else {
+    } else if (messageValue.length > 0) {
       socket.emit("sendMessage", {
         issueId: uid(16),
         text: messageValue,

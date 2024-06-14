@@ -19,6 +19,10 @@ export default function Home() {
     } else {
       setCookie("user-id", uid(16), {
         secure: true,
+        domain: isDevMode
+          ? process.env.DEV_MODAL_LINK
+          : process.env.PRODUCTION_MODAL_LINK,
+        sameSite: "none",
       });
     }
   }, []);

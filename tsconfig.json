@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/features/search-slice/searchRender/hook/index.jsx", "src/features/search-slice/searchRender/ui/ui.tsx"],
   "exclude": ["node_modules"]
 }

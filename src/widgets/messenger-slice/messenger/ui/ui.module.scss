@@ -1,0 +1,34 @@
+.messenger {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  .form {
+    border-top: 2px solid #ebebeb;
+    margin-top: auto;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    padding: 0 4px;
+
+    .submitButton {
+      border: none;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 39px;
+      height: 39px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 4px;
+      &:hover {
+        background-color: #ebebeb;
+      }
+      &:active {
+        background-color: #f9f9f9;
+      }
+    }
+  }
+}

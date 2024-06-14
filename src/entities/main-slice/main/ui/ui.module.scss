@@ -1,0 +1,63 @@
+.mainWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: -16px;
+  width: 100%;
+  flex-direction: column;
+
+  .p {
+    font-size: 16px;
+    font-weight: 500;
+    max-width: 219px;
+    font-style: normal;
+    line-height: 22px;
+    white-space: pre-line;
+    min-height: 44px;
+    text-align: center;
+  }
+  .btns {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    .mainBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-wrap: nowrap;
+      color: #fff;
+      background-color: #333;
+      transition: all 0.2s;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 32px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 150%;
+      &:hover {
+        background-color: #222;
+      }
+    }
+    .whatsApp,
+    .telegram {
+      width: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      height: 48px;
+      background-color: #f2f2f2;
+      border-radius: 50%;
+      border: none;
+      transition: all 0.2s;
+      &:hover {
+        background-color: #ebebeb;
+      }
+    }
+  }
+}

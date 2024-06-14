@@ -1,5 +1,5 @@
 import { SearchInput } from "@/entities/search-slice/searchInput";
-import { SearchRender } from "@/features/search-slice/searchRender";
+import PDFViewer from "@/features/search-slice/searchRender/ui/ui";
 import { PageLayout } from "@/shared/layouts/pageLayout";
 import { SearchProps } from "antd/es/input";
 import { useState } from "react";
@@ -16,7 +16,10 @@ export const Search = () => {
     <>
       <PageLayout style={{ gap: "12px" }}>
         <SearchInput onSearch={onSearch} />
-        <SearchRender searchValue={searchValue} />
+        <PDFViewer
+          pdfUrl="https://postideas.ru/document"
+          searchText={searchValue}
+        />
       </PageLayout>
     </>
   );

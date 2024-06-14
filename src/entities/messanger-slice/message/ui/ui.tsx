@@ -14,6 +14,7 @@ export const Message = ({ message }: { message?: IMessage }) => {
     <>
       <div className={styles.messageWrap}>
         <div
+          id={message?.id}
           style={{
             flexDirection: isMessageMine ? undefined : "row-reverse",
             marginLeft: isMessageMine ? "auto" : "0",

@@ -1,27 +1,35 @@
-import { Button, Form, Input, Upload } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Form, Input, message, Upload } from "antd";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { IEmailForm } from "../interface";
 import { LinkOutlined } from "@ant-design/icons";
 import styles from "./ui.module.scss";
 import { useCookies } from "react-cookie";
-import { postEmailByAuthorID } from "../api";
-import type { UploadFile } from "antd";
+import { postEmailByAuthorID, postFiles } from "../api";
 
 export const EmailForm = () => {
   const [cookies] = useCookies(["user-id"]);
+  const filePicker = useRef<HTMLInputElement | null>(null);
   const [isButtonDisabled, setButtonDisabled] = useState<boolean>(true);
   const [formData, setFormData] = useState<IEmailForm>({
     name: "",
     text: "",
     email: "",
-    filesName: undefined,
+    filesName: [],
   });
+
   const handleInputChange = (name: string, value: string | null) => {
     setFormData((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
   };
+
   async function onSubmit() {
     const res = await postEmailByAuthorID(formData, cookies["user-id"]);
     if (res instanceof Error) return;
@@ -30,12 +38,28 @@ export const EmailForm = () => {
     }
   }
 
-  async function onUploadFileChange({ fileList }: { fileList: UploadFile[] }) {
-    setFormData((prev) => ({
-      ...prev,
-      fileList: fileList,
-    }));
+  const handlePick = () => {
+    if (filePicker.current) {
+      filePicker.current.click();
+    }
+  };
+
+  async function onUploadFileChange(event: ChangeEvent<HTMLInputElement>) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const resData = new FormData();
+      resData.append("file", file);
+      const res = await postFiles(resData);
+      if (res instanceof Error) return;
+      else {
+        setFormData((prev) => ({
+          ...prev,
+          filesName: [...prev.filesName, res.name],
+        }));
+      }
+    }
   }
+
   useEffect(() => {
     if (
       formData.name.length > 0 &&
@@ -45,6 +69,7 @@ export const EmailForm = () => {
       setButtonDisabled(false);
     } else setButtonDisabled(true);
   }, [formData.email, formData.name, formData.text]);
+
   return (
     <>
       <Form
@@ -104,19 +129,26 @@ export const EmailForm = () => {
               placeholder="Какой у вас вопрос?"
             />
           </Form.Item>
-          <Form.Item
-            style={{
-              width: "100%",
-              textAlign: "start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Upload onChange={onUploadFileChange}>
-              <Button type="link" icon={<LinkOutlined />}>
-                Прикрепить файл
-              </Button>
-            </Upload>
-          </Form.Item>
+          <span className={styles.uploadFile}>
+            <input
+              type="file"
+              hidden
+              ref={filePicker}
+              id="upload"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                onUploadFileChange(event)
+              }
+            />
+            <Button
+              onClick={handlePick}
+              size="small"
+              type="link"
+              icon={<LinkOutlined />}
+            >
+              Прикрепить файл
+            </Button>
+            /
+          </span>
 
           <button disabled={isButtonDisabled} className={styles.button}>
             Отправить письмо{" "}

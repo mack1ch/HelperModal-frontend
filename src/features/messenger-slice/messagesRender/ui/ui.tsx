@@ -25,7 +25,10 @@ export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
                   {issue.messages.map((message) => (
                     <>
                       <Message key={message.id} message={message} />
-                     
+                      <PDFViewer
+                        currentPage={message.page}
+                        documentUrl={message.fileLink}
+                      />
                     </>
                   ))}
                 </div>

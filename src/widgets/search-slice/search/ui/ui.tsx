@@ -1,6 +1,5 @@
 import { SearchInput } from "@/entities/search-slice/searchInput";
 import { PDFViewer } from "@/features/search-slice/searchRender/ui/ui";
-
 import { PageLayout } from "@/shared/layouts/pageLayout";
 import { SearchProps } from "antd/es/input";
 import { useState } from "react";
@@ -18,7 +17,7 @@ export const Search = () => {
     <>
       <PageLayout style={{ gap: "12px" }}>
         <SearchInput onSearch={onSearch} />
-        <PDFViewer documentUrl="https://helper.unisport.space/files/source/1aa5979d23fbc7df.pdf" />
+        <PDFViewer documentUrl="" />
       </PageLayout>
     </>
   );

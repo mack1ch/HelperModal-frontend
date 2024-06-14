@@ -1,10 +1,11 @@
+"use client";
+
 import { PageLayout } from "@/shared/layouts/pageLayout";
 import styles from "./ui.module.scss";
 import { IIssue } from "@/shared/interface/issue";
 import { Message } from "@/entities/messanger-slice/message";
 import { formatDateToDayMonthYearFormat } from "@/shared/lib/parce/date";
 import { PDFViewer } from "@/features/search-slice/searchRender/ui/ui";
-import { message } from "antd";
 
 export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
   return (
@@ -24,12 +25,7 @@ export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
                   {issue.messages.map((message) => (
                     <>
                       <Message key={message.id} message={message} />
-                      {message.fileLink && message.page && (
-                        <PDFViewer
-                          currentPage={message.page}
-                          documentUrl={message.fileLink}
-                        />
-                      )}
+                     
                     </>
                   ))}
                 </div>

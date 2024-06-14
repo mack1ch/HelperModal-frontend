@@ -3,10 +3,7 @@
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import styles from "./ui.module.scss";
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
+import "../config";
 
 export const PDFViewer = ({
   documentUrl,
@@ -17,15 +14,17 @@ export const PDFViewer = ({
 }) => {
   return (
     <>
-      <Document file={documentUrl}>
-        <div className={styles.renderPages}>
-          <Page
-            pageNumber={currentPage}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-          />
-        </div>
-      </Document>
+      {documentUrl && (
+        <Document file={documentUrl}>
+          <div className={styles.renderPages}>
+            <Page
+              pageNumber={currentPage}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
+          </div>
+        </Document>
+      )}
     </>
   );
 };

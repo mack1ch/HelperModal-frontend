@@ -12,11 +12,11 @@ import { closeOldIssues } from "../model";
 import { changeIssueClosingByID, getIssuesByAuthorID } from "../api";
 import { IMessage } from "@/shared/interface/message";
 
-
 const socket = io(`https://helper.unisport.space/`);
 
 export const Messenger = () => {
   const [cookies] = useCookies(["user-id"]);
+  console.log(cookies);
   const [messageValue, setMessageValue] = useState<string>("");
   const [issues, setIssues] = useState<IIssue[]>();
   useEffect(() => {

@@ -1,22 +1,31 @@
 "use client";
 
-import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { Document, Page } from "react-pdf";
+import { pdfjs } from "react-pdf";
+import styles from "./ui.module.scss";
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
-const PDFViewer = ({ documentUrl }: { documentUrl?: string }) => {
+export const PDFViewer = ({
+  documentUrl,
+  currentPage,
+}: {
+  documentUrl?: string;
+  currentPage?: number;
+}) => {
   return (
     <>
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
-        <div
-          style={{
-            border: "1px solid rgba(0, 0, 0, 0.3)",
-            height: "750px",
-          }}
-        >
-          <Viewer fileUrl={documentUrl || ""} />
+      <Document file={documentUrl}>
+        <div className={styles.renderPages}>
+          <Page
+            pageNumber={currentPage}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
         </div>
-      </Worker>
+      </Document>
     </>
   );
 };
-
-export default PDFViewer;

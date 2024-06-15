@@ -14,7 +14,7 @@ export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
         <div className={styles.messengerWrap}>
           {issues?.map((issue) => {
             const { day, month, year } = formatDateToDayMonthYearFormat(
-              issue.createdAt
+              issue.createdAt || new Date()
             );
             return (
               <>

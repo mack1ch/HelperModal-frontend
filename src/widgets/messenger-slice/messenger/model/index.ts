@@ -8,7 +8,7 @@ export const closeOldIssues = (issues: IIssue[]): boolean => {
   issues.forEach((issue) => {
     if (
       !issue.isClosed &&
-      now - new Date(issue.createdAt).getTime() > ONE_HOUR
+      now - new Date(issue.createdAt || new Date()).getTime() > ONE_HOUR
     ) {
       answer = true;
     } else answer = false;

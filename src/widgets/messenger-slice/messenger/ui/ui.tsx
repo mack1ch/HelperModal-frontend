@@ -16,7 +16,6 @@ const socket = io(`https://helper.unisport.space/`);
 
 export const Messenger = () => {
   const [cookies] = useCookies(["user-id"]);
-
   const [messageValue, setMessageValue] = useState<string>("");
   const [issues, setIssues] = useState<IIssue[]>();
   useEffect(() => {
@@ -26,7 +25,7 @@ export const Messenger = () => {
       setIssues(res);
     }
     getIssues();
-  }, [cookies]);
+  }, []);
   useEffect(() => {
     const joinRoom = () => {
       if (cookies["user-id"]) {
@@ -94,18 +93,32 @@ export const Messenger = () => {
       });
     }
     setIssues((prevIssues) => {
-      if (!prevIssues || prevIssues.length === 0) {
-        return prevIssues;
-      }
-
+      if (!prevIssues) return [] as IIssue[];
       const updatedIssues = [...prevIssues];
       let lastIssue: IIssue | undefined =
         updatedIssues[updatedIssues.length - 1];
 
-      if (
-        lastIssue.messages &&
+      if ((!prevIssues || prevIssues.length === 0) && messageValue.length > 0) {
+        const newIssue: IIssue = {
+          issueId: uid(10),
+          authorId: cookies["user-id"],
+          isClosed: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          messages: [
+            {
+              id: "",
+              text: messageValue,
+              issueId: uid(10),
+              authorId: cookies["user-id"],
+            } as IMessage,
+          ],
+        };
+        return [newIssue];
+      } else if (
+        lastIssue?.messages &&
         lastIssue.messages.length > 0 &&
-        lastIssue.isClosed === false &&
+        !lastIssue.isClosed &&
         messageValue.length > 0
       ) {
         lastIssue.messages.push({
@@ -115,32 +128,30 @@ export const Messenger = () => {
           authorId: lastIssue.authorId,
         } as IMessage);
       } else if (
+        lastIssue?.messages &&
         lastIssue.messages.length > 0 &&
         lastIssue.isClosed &&
         messageValue.length > 0
       ) {
-        setIssues((prevIssues) => [
-          ...prevIssues!,
-          {
-            issueId: uid(10),
-            authorId: cookies["user-id"],
-          } as IIssue,
-        ]);
-        let newLastIssue: IIssue | undefined =
-          updatedIssues[updatedIssues.length - 1];
-
-        newLastIssue.messages = [
-          {
-            id: "",
-            text: messageValue,
-            issueId: lastIssue.issueId,
-            authorId: lastIssue.authorId,
-          } as IMessage,
-        ];
+        const newIssue: IIssue = {
+          issueId: uid(10),
+          authorId: cookies["user-id"],
+          isClosed: false,
+          messages: [
+            {
+              id: "",
+              text: messageValue,
+              issueId: uid(10),
+              authorId: cookies["user-id"],
+            } as IMessage,
+          ],
+        };
+        return [...updatedIssues, newIssue];
       }
 
       return updatedIssues;
     });
+
     setMessageValue("");
   }
 

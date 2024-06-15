@@ -1,4 +1,4 @@
-import {  Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { useEffect, useState } from "react";
 
 import styles from "./ui.module.scss";
@@ -18,13 +18,7 @@ export const PhoneForm = () => {
       [name]: value,
     }));
   };
-  async function onSubmit() {
-    // const res = await postEmailByAuthorID(formData, cookies["user-id"]);
-    // if (res instanceof Error) return;
-    // else {
-    //   console.log("good");
-    // }
-  }
+  async function onSubmit() {}
 
   useEffect(() => {
     if (

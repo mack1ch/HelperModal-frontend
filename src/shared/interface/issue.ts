@@ -5,6 +5,6 @@ export interface IIssue {
   authorId: string;
   isClosed: boolean;
   messages: IMessage[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

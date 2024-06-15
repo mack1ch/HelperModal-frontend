@@ -57,7 +57,7 @@ export const Messenger = () => {
     if (issues) {
       const res = await changeIssueClosingByID(
         issues[issues?.length - 1].issueId,
-        false
+        true
       );
       if (res instanceof Error)
         message.error("Ошибка. Наши лучшие разработчики уже решают её");
@@ -90,7 +90,7 @@ export const Messenger = () => {
     }
     socket.on("receiveMessage", onReceiveMessages);
   }, [socket]);
-  console.log(issues);
+
   function onSubmit(event: FormEvent) {
     event.preventDefault();
 

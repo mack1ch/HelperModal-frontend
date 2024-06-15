@@ -1,6 +1,11 @@
 .renderPages {
   width: 50%;
   height: 50%;
+  max-height: 400px;
   padding: 16px;
+
   background: #ebebeb;
+  overflow: hidden;
+  overflow-y: auto;
+  z-index: -100000000;
 }

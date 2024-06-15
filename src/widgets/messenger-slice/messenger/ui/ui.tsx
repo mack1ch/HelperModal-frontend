@@ -127,7 +127,6 @@ export const Messenger = () => {
   return (
     <>
       <div className={styles.messenger}>
-       
         <div className={styles.messagesContainer}>
           <MessagesRender issues={issues} />
         </div>

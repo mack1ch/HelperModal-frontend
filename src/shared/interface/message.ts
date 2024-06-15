@@ -4,6 +4,6 @@ export interface IMessage {
   authorId: string;
   issueId: string;
   createdAt: Date;
-  fileLink: string;
-  page: number;
+  fileLink?: string;
+  page?: number;
 }

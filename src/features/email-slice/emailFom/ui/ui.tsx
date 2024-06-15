@@ -33,9 +33,6 @@ export const EmailForm = () => {
   async function onSubmit() {
     const res = await postEmailByAuthorID(formData, cookies["user-id"]);
     if (res instanceof Error) return;
-    else {
-      console.log("good");
-    }
   }
 
   const handlePick = () => {

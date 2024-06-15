@@ -11,13 +11,18 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@react-pdf-viewer/page-navigation": "^3.12.0",
+    "@react-pdf-viewer/zoom": "^3.12.0",
     "@react-pdf/renderer": "^3.4.4",
     "antd": "^5.18.1",
     "axios": "^1.7.2",
-    "next": "14.2.4",
-    "react": "^18",
+    "next": "^14.2.4",
+    "pdfjs-dist": "^3.11.174",
+    "react": "^18.3.1",
     "react-cookie": "^7.1.4",
-    "react-dom": "^18",
+    "react-dom": "^18.3.1",
     "react-pdf": "^9.0.0",
     "sass": "^1.77.5",
     "socket.io-client": "^4.7.5",
@@ -26,10 +31,12 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pdf-viewer-reactjs": "^2.2.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.4",
+    "eslint-config-next": "^14.2.4",
+    "raw-loader": "^4.0.2",
     "typescript": "^5"
   }
 }

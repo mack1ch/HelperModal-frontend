@@ -6,7 +6,7 @@ export const changeIssueClosingByID = async (
   isClosed: boolean
 ): Promise<IIssue | Error> => {
   try {
-    const { data }: { data: IIssue } = await instance.post(
+    const { data }: { data: IIssue } = await instance.patch(
       `/issues/${issueID}`,
       {
         isClosed: isClosed,

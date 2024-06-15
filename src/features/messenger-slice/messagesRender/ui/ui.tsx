@@ -25,10 +25,7 @@ export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
                   {issue.messages.map((message) => (
                     <>
                       <Message key={message.id} message={message} />
-                      <PDFViewerComponent
-                        currentPage={message.page}
-                        documentUrl={message.fileLink}
-                      />
+                      <PDFViewerComponent documents={message.documents} />
                     </>
                   ))}
                 </div>

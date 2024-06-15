@@ -79,7 +79,7 @@ export const Messenger = () => {
     if (issues && issues.length > 0 && messageValue.length > 0) {
       socket.emit("sendMessage", {
         issueId: issues[issues?.length - 1].isClosed
-          ? uid(16)
+          ? uid(10)
           : issues[issues?.length - 1].issueId,
         text: messageValue,
         authorId: cookies["user-id"],
@@ -87,7 +87,7 @@ export const Messenger = () => {
       });
     } else if (messageValue.length > 0) {
       socket.emit("sendMessage", {
-        issueId: uid(16),
+        issueId: uid(10),
         text: messageValue,
         authorId: cookies["user-id"],
         isQuestion: true,
@@ -99,17 +99,37 @@ export const Messenger = () => {
       }
 
       const updatedIssues = [...prevIssues];
-      const lastIssue = updatedIssues[updatedIssues.length - 1];
+      let lastIssue: IIssue | undefined =
+        updatedIssues[updatedIssues.length - 1];
 
-      if (lastIssue.messages) {
+      if (
+        lastIssue.messages &&
+        lastIssue.messages.length > 0 &&
+        lastIssue.isClosed === false &&
+        messageValue.length > 0
+      ) {
         lastIssue.messages.push({
           id: "",
           text: messageValue,
           issueId: lastIssue.issueId,
           authorId: lastIssue.authorId,
         } as IMessage);
-      } else {
-        lastIssue.messages = [
+      } else if (
+        lastIssue.messages.length > 0 &&
+        lastIssue.isClosed &&
+        messageValue.length > 0
+      ) {
+        setIssues((prevIssues) => [
+          ...prevIssues!,
+          {
+            issueId: uid(10),
+            authorId: cookies["user-id"],
+          } as IIssue,
+        ]);
+        let newLastIssue: IIssue | undefined =
+          updatedIssues[updatedIssues.length - 1];
+
+        newLastIssue.messages = [
           {
             id: "",
             text: messageValue,

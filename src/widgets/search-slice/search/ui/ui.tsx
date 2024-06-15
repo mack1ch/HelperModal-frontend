@@ -1,5 +1,4 @@
 import { SearchInput } from "@/entities/search-slice/searchInput";
-import { PDFViewerComponent } from "@/features/search-slice/searchRender/ui/ui";
 import { PageLayout } from "@/shared/layouts/pageLayout";
 import { SearchProps } from "antd/es/input";
 import { useState } from "react";

@@ -7,8 +7,8 @@
   .messagesContainer {
     flex: 1; /* Занимает оставшуюся высоту */
     overflow-y: auto; /* Добавляет вертикальную прокрутку */
-    padding-bottom: 48px;
-    padding-top: 78px;
+    margin-bottom: 48px;
+    margin-top: 78px;
   }
   .form {
     border-top: 2px solid #ebebeb;
@@ -16,6 +16,7 @@
     align-items: flex-end;
     width: 100%;
     position: fixed;
+    z-index: 10;
     bottom: 0;
     background: #fff;
     padding: 10px; /* Добавьте отступы для удобства */

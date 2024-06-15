@@ -17,6 +17,8 @@
     "react": "^18.3.1",
     "react-cookie": "^7.1.4",
     "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "rehype-highlight": "^7.0.0",
     "sass": "^1.77.5",
     "socket.io-client": "^4.7.5",
     "swr": "^2.2.5",
@@ -24,12 +26,10 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/pdf-viewer-reactjs": "^2.2.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "^14.2.4",
-    "raw-loader": "^4.0.2",
     "typescript": "^5"
   }
 }

@@ -18,14 +18,15 @@
       transition: all 0.3s;
     }
     .messageText {
-     
       border-radius: 10px 10px 0 10px;
       padding: 6px 15px;
       max-width: 95%;
       background-color: #1d85d0;
       color: #fff;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 400;
+
+      overflow: hidden;
     }
   }
 }

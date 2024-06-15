@@ -5,6 +5,7 @@ import styles from "./ui.module.scss";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { formatTimeToHHMMFormat } from "@/shared/lib/parce/time";
+import { formatText } from "../model";
 
 export const Message = ({ message }: { message?: IMessage }) => {
   const [cookies] = useCookies(["user-id"]);
@@ -34,14 +35,7 @@ export const Message = ({ message }: { message?: IMessage }) => {
             }}
             className={styles.messageText}
           >
-            {message?.text.split("\n").map((item, idx) => {
-              return (
-                <span key={idx}>
-                  {item}
-                  <br />
-                </span>
-              );
-            })}
+            {formatText(message?.text.split("\n") || [])}
           </p>
         </div>
       </div>

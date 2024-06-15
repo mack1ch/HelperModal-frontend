@@ -1,4 +1,4 @@
-import { Input, Spin } from "antd";
+import { Button, Input, message, Spin } from "antd";
 import styles from "./ui.module.scss";
 import { MessagesRender } from "@/features/messenger-slice/messagesRender";
 import PlaneTilt from "../../../../../public/icons/messenger/paperPlaneTilt.svg";
@@ -52,6 +52,21 @@ export const Messenger = () => {
     }
     patchIssueCloses();
   }, [issues]);
+
+  async function handlePatchIssueClosesByBtn() {
+    if (issues) {
+      const res = await changeIssueClosingByID(
+        issues[issues?.length - 1].issueId,
+        false
+      );
+      if (res instanceof Error)
+        message.error("Ошибка. Наши лучшие разработчики уже решают её");
+      else {
+        message.success("Создано новое обращение");
+        issues[issues?.length - 1] = res;
+      }
+    }
+  }
 
   useEffect(() => {
     function onReceiveMessages(value: IMessage) {
@@ -168,6 +183,16 @@ export const Messenger = () => {
       <div className={styles.messenger}>
         <div className={styles.messagesContainer}>
           <MessagesRender issues={issues} />
+          {issues && issues?.length > 0 && (
+            <Button
+              onClick={handlePatchIssueClosesByBtn}
+              style={{ width: "100%" }}
+              size="middle"
+              type="text"
+            >
+              Кликните, чтобы начать новый тикет
+            </Button>
+          )}
         </div>
         <form className={styles.form} onSubmit={onSubmit}>
           <Input.Search

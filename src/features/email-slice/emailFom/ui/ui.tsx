@@ -126,28 +126,12 @@ export const EmailForm = () => {
               placeholder="Какой у вас вопрос?"
             />
           </Form.Item>
-          <span className={styles.uploadFile}>
-            <input
-              type="file"
-              hidden
-              ref={filePicker}
-              id="upload"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                onUploadFileChange(event)
-              }
-            />
-            <Button
-              onClick={handlePick}
-              size="small"
-              type="link"
-              icon={<LinkOutlined />}
-            >
-              Прикрепить файл
-            </Button>
-            /
-          </span>
 
-          <button disabled={isButtonDisabled} className={styles.button}>
+          <button
+            onClick={() => message.success("Ваше обращение зарегистриовано")}
+            disabled={isButtonDisabled}
+            className={styles.button}
+          >
             Отправить письмо{" "}
             <span className={styles.subTitle}>ответим в течении 2 часов</span>{" "}
           </button>

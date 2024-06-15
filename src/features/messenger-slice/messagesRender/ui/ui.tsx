@@ -5,7 +5,7 @@ import styles from "./ui.module.scss";
 import { IIssue } from "@/shared/interface/issue";
 import { Message } from "@/entities/messanger-slice/message";
 import { formatDateToDayMonthYearFormat } from "@/shared/lib/parce/date";
-import { PDFViewerComponent } from "@/features/search-slice/searchRender/ui/ui";
+import { PDFViewerComponent } from "@/entities/messanger-slice/pdfVIewer";
 
 export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
   return (

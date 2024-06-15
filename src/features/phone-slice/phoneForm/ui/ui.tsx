@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 import { useEffect, useState } from "react";
 
 import styles from "./ui.module.scss";
@@ -90,7 +90,11 @@ export const PhoneForm = () => {
             />
           </Form.Item>
 
-          <button disabled={isButtonDisabled} className={styles.button}>
+          <button
+            onClick={() => message.success("Ваше звонок зарегистриован")}
+            disabled={isButtonDisabled}
+            className={styles.button}
+          >
             Отправить письмо{" "}
             <span className={styles.subTitle}>ответим в течении 2 часов</span>{" "}
           </button>

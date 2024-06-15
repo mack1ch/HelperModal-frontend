@@ -23,7 +23,7 @@ export const SearchInput = ({
     <>
       <Search
         size="large"
-        placeholder="Введите запрос"
+        placeholder="Введите заголовок документа, например НДС"
         onSearch={onSearch}
         style={{ width: "100%" }}
       />

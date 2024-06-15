@@ -1,4 +1,4 @@
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 import styles from "./ui.module.scss";
 import { MessagesRender } from "@/features/messenger-slice/messagesRender";
 import PlaneTilt from "../../../../../public/icons/messenger/paperPlaneTilt.svg";
@@ -11,11 +11,13 @@ import { IIssue } from "@/shared/interface/issue";
 import { closeOldIssues } from "../model";
 import { changeIssueClosingByID, getIssuesByAuthorID } from "../api";
 import { IMessage } from "@/shared/interface/message";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const socket = io(`https://helper.unisport.space/`);
 
 export const Messenger = () => {
   const [cookies] = useCookies(["user-id"]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messageValue, setMessageValue] = useState<string>("");
   const [issues, setIssues] = useState<IIssue[]>();
   useEffect(() => {
@@ -53,6 +55,7 @@ export const Messenger = () => {
 
   useEffect(() => {
     function onReceiveMessages(value: IMessage) {
+      setIsLoading(false);
       setIssues((prevIssues) => {
         if (!prevIssues || prevIssues.length === 0) {
           return prevIssues;
@@ -72,10 +75,12 @@ export const Messenger = () => {
     }
     socket.on("receiveMessage", onReceiveMessages);
   }, [socket]);
-
+  console.log(issues);
   function onSubmit(event: FormEvent) {
     event.preventDefault();
+
     if (issues && issues.length > 0 && messageValue.length > 0) {
+      setIsLoading(true);
       socket.emit("sendMessage", {
         issueId: issues[issues?.length - 1].isClosed
           ? uid(10)
@@ -85,6 +90,7 @@ export const Messenger = () => {
         isQuestion: true,
       });
     } else if (messageValue.length > 0) {
+      setIsLoading(true);
       socket.emit("sendMessage", {
         issueId: uid(10),
         text: messageValue,
@@ -99,8 +105,9 @@ export const Messenger = () => {
         updatedIssues[updatedIssues.length - 1];
 
       if ((!prevIssues || prevIssues.length === 0) && messageValue.length > 0) {
+        const newIssueID = uid(10);
         const newIssue: IIssue = {
-          issueId: uid(10),
+          issueId: newIssueID,
           authorId: cookies["user-id"],
           isClosed: false,
           createdAt: new Date(),
@@ -109,7 +116,7 @@ export const Messenger = () => {
             {
               id: "",
               text: messageValue,
-              issueId: uid(10),
+              issueId: newIssueID,
               authorId: cookies["user-id"],
             } as IMessage,
           ],
@@ -133,15 +140,16 @@ export const Messenger = () => {
         lastIssue.isClosed &&
         messageValue.length > 0
       ) {
+        const newIssueID = uid(10);
         const newIssue: IIssue = {
-          issueId: uid(10),
+          issueId: newIssueID,
           authorId: cookies["user-id"],
           isClosed: false,
           messages: [
             {
               id: "",
               text: messageValue,
-              issueId: uid(10),
+              issueId: newIssueID,
               authorId: cookies["user-id"],
             } as IMessage,
           ],
@@ -166,9 +174,18 @@ export const Messenger = () => {
             value={messageValue}
             onSearch={() => onSubmit}
             enterButton={
-              <button onClick={onSubmit} className={styles.submitButton}>
-                <Image src={PlaneTilt} width={24} height={24} alt="Submit" />
-              </button>
+              isLoading ? (
+                <button
+                  disabled={isLoading}
+                  style={{ border: "none", background: "transparent" }}
+                >
+                  <Spin indicator={<LoadingOutlined spin />} size="large" />
+                </button>
+              ) : (
+                <button onClick={onSubmit} className={styles.submitButton}>
+                  <Image src={PlaneTilt} width={24} height={24} alt="Submit" />
+                </button>
+              )
             }
             onChange={(e) => setMessageValue(e.target.value)}
             size="large"

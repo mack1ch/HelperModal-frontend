@@ -51,7 +51,7 @@ export const PDFViewerComponent = ({
                     }}
                     className={styles.chip}
                   >
-                    Документ № {index + 1}, страница {item.page}
+                    Документ № {index + 1}, страница {item.page! + 1}
                   </button>
                 </Tooltip>
               ))}
@@ -73,7 +73,9 @@ export const PDFViewerComponent = ({
                         height="700"
                         data={
                           renderItem.fileLink +
-                          `#page=${renderItem.page} + '#toolbar=0&navpanes=0`
+                          `#page=${
+                            renderItem?.page! + 1
+                          } + '#toolbar=0&navpanes=0`
                         }
                         type="application/pdf"
                       >
@@ -87,7 +89,9 @@ export const PDFViewerComponent = ({
                           height="700"
                           src={
                             renderItem.fileLink +
-                            `#page=${renderItem.page} + '#toolbar=0&navpanes=0'`
+                            `#page=${
+                              renderItem?.page! + 1
+                            } + '#toolbar=0&navpanes=0'`
                           }
                         >
                           <p>Ваш браузер не поддерживает PDF</p>

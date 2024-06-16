@@ -5,6 +5,7 @@ import styles from "./ui.module.scss";
 import { Button } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 export const SearchRender = ({ searchValue }: { searchValue?: string }) => {
   const { data: searchedFiles } = useSWR<ISearchRes[]>(
     searchValue && searchValue.length > 0
@@ -12,7 +13,7 @@ export const SearchRender = ({ searchValue }: { searchValue?: string }) => {
       : "",
     fetcher
   );
-  console.log(searchedFiles);
+  const router = useRouter();
   return (
     <>
       <div className={styles.wrap}>
@@ -28,7 +29,12 @@ export const SearchRender = ({ searchValue }: { searchValue?: string }) => {
           searchValue?.length > 0 && (
             <div className={styles.header}>
               Уточните запрос, или напишите в{" "}
-              <Button type="link" icon={<MessageOutlined />} size="small">
+              <Button
+                onClick={() => router.push("/messenger")}
+                type="link"
+                icon={<MessageOutlined />}
+                size="small"
+              >
                 Чат
               </Button>
             </div>

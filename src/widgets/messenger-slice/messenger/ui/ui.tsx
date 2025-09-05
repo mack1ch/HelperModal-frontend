@@ -197,6 +197,7 @@ export const Messenger = () => {
         authorId: userId,
         isQuestion: true,
         messageId,
+        role: "user",
       });
 
       setMessageValue("");

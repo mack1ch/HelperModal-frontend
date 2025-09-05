@@ -22,7 +22,7 @@ export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
                   {day} {month} {year} г.
                 </span>
                 <div className={styles.render}>
-                  {issue.messages.map((message) => (
+                  {issue.messages?.map((message) => (
                     <>
                       <Message key={message.id} message={message} />
                       <PDFViewerComponent documents={message.documents} />

@@ -6,7 +6,7 @@ import CaretLeft from "../../../../public/icons/header/caretLeft.svg";
 import { Header } from "@/entities/header-slice/header";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Rosatom from "../../../../public/assets/logos/rosatomLogo.png";
+import Roseltorg from "../../../../public/assets/logos/roseltorg.webp";
 import { Messenger } from "@/widgets/messenger-slice/messenger";
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
           }
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Image src={Rosatom} width={36} height={36} alt="Росатом" />
+            <Image src={Roseltorg} width={36} height={36} alt="Росатом" />
             <div
               style={{
                 display: "flex",
@@ -40,7 +40,7 @@ export default function Home() {
                   height: "17px",
                 }}
               >
-                Росатом
+                Росэтолрг
               </span>
               <span
                 style={{

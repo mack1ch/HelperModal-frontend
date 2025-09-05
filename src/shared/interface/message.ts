@@ -1,10 +1,11 @@
 export interface IMessage {
-  id: string;
   text: string;
-  authorId: string;
-  issueId: string;
-  createdAt: Date;
+  id: string;
   documents?: IDocument[];
+  createdAt: Date;
+  issueId: string;
+  authorId: string;
+  role: "AI" | "operator" | "user";
 }
 
 export interface IDocument {

@@ -2,24 +2,22 @@
 
 import { IMessage } from "@/shared/interface/message";
 import styles from "./ui.module.scss";
-import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { formatTimeToHHMMFormat } from "@/shared/lib/parce/time";
-import { formatText } from "../model";
 
 export const Message = ({ message }: { message?: IMessage }) => {
-  const [cookies] = useCookies(["user-id"]);
   const [isHover, setIsHover] = useState<boolean>(false);
-  const isMessageMine: boolean = message?.authorId === cookies["user-id"];
+  const isNotMessageMine: boolean =
+    message?.role == "AI" || message?.role == "operator";
   return (
     <>
       <div className={styles.messageWrap}>
         <div
           id={message?.id}
           style={{
-            flexDirection: isMessageMine ? undefined : "row-reverse",
-            marginLeft: isMessageMine ? "auto" : "0",
-            marginRight: isMessageMine ? "0" : "auto",
+            flexDirection: !isNotMessageMine ? undefined : "row-reverse",
+            marginLeft: !isNotMessageMine ? "auto" : "0",
+            marginRight: !isNotMessageMine ? "0" : "auto",
           }}
           className={styles.message}
         >
@@ -30,12 +28,13 @@ export const Message = ({ message }: { message?: IMessage }) => {
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
             style={{
-              backgroundColor: isMessageMine ? undefined : "#eee",
-              color: isMessageMine ? undefined : "#222",
+              backgroundColor: !isNotMessageMine ? undefined : "#eee",
+              color: !isNotMessageMine ? undefined : "#222",
             }}
             className={styles.messageText}
           >
-            {formatText(message?.text.split("\n") || [])}
+            {/* {formatText(message?.text.split("\n") || [])} */}
+            {message?.text}
           </p>
         </div>
       </div>

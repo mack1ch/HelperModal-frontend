@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const BASE_URL = "https://helper.unisport.space";
+const BASE_URL = "https://api.rltorg.ru/";
 
 export const fetcher = (url: string) =>
   fetch(BASE_URL + url, {

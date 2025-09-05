@@ -1,7 +1,6 @@
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import styles from "./ui.module.scss";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 export const IconWrap = ({
   image,
   onClick,

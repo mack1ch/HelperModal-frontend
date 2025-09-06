@@ -6,6 +6,7 @@ export interface IMessage {
   issueId: string;
   authorId: string;
   role: "AI" | "operator" | "user";
+  userRating: 'like' | 'dislike'
 }
 
 export interface IDocument {

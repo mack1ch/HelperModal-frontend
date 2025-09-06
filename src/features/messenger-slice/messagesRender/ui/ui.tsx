@@ -29,6 +29,7 @@ export const MessagesRender = ({ issues }: { issues?: IIssue[] }) => {
                     </>
                   ))}
                 </div>
+
                 {issue.isClosed && (
                   <span className={styles.date}>Обращение закрыто</span>
                 )}

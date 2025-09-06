@@ -2,8 +2,17 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { Button, Input, message, Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Button, Input, message, Spin, Dropdown, MenuProps } from "antd";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  MonitorOutlined,
+  AppstoreOutlined,
+  HourglassOutlined,
+  UserOutlined,
+  ShopOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import { io, Socket } from "socket.io-client";
 import { useCookies } from "react-cookie";
 import { uid } from "uid";
@@ -21,6 +30,10 @@ import {
   makeUserMessage,
   toDate,
 } from "../model";
+import { responseModeItems } from "../data";
+
+type ResponseMode = "auto" | "short" | "detailed";
+type UserRole = "individual" | "entrepreneur" | "legal";
 
 export const Messenger = () => {
   const [cookies] = useCookies(["user-id"]);
@@ -29,22 +42,88 @@ export const Messenger = () => {
   const [issues, setIssues] = useState<IIssue[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [messageValue, setMessageValue] = useState("");
+  const [responseMode, setResponseMode] = useState<ResponseMode>("auto");
+  const [userRole, setUserRole] = useState<UserRole>("individual");
+  const [sentMessageIds, setSentMessageIds] = useState<Set<string>>(new Set());
 
-  /** Стабильный инстанс сокета только на клиенте */
   const socketRef = useRef<Socket | null>(null);
 
-  /** Последний тикет и его состояние */
   const lastIssue = useMemo(
     () => (issues.length ? issues[issues.length - 1] : null),
     [issues]
   );
   const isLastClosed = !!lastIssue?.isClosed;
 
-  /** Подключение к сокету (без SSR) */
+  const handleMenuClick = useCallback(({ key }: { key: string }) => {
+    if (key.startsWith("role_")) {
+      const role = key.split("_")[1] as UserRole;
+      setUserRole(role);
+      message.success(`Роль изменена на: ${getRoleLabel(role)}`);
+    } else {
+      setResponseMode(key as ResponseMode);
+      message.info(`Режим ответа: ${getModeLabel(key as ResponseMode)}`);
+    }
+  }, []);
+
+  const getResponseModeIcon = (mode: ResponseMode): React.ReactNode => {
+    switch (mode) {
+      case "auto":
+        return <PlusOutlined style={{ fontSize: "16px" }} />;
+      case "short":
+        return <PlusOutlined style={{ fontSize: "16px" }} />;
+      case "detailed":
+        return <PlusOutlined style={{ fontSize: "16px" }} />;
+      default:
+        return <PlusOutlined />;
+    }
+  };
+
+  const getRoleIcon = (role: UserRole): React.ReactNode => {
+    switch (role) {
+      case "individual":
+        return <UserOutlined style={{ fontSize: "16px" }} />;
+      case "entrepreneur":
+        return <ShopOutlined style={{ fontSize: "16px" }} />;
+      case "legal":
+        return <TeamOutlined style={{ fontSize: "16px" }} />;
+      default:
+        return <UserOutlined />;
+    }
+  };
+
+  const getModeLabel = (mode: ResponseMode): string => {
+    switch (mode) {
+      case "auto":
+        return "Автоматический";
+      case "short":
+        return "Короткий";
+      case "detailed":
+        return "Развернутый";
+      default:
+        return "Автоматический";
+    }
+  };
+
+  const getRoleLabel = (role: UserRole): string => {
+    switch (role) {
+      case "individual":
+        return "Физ. лицо";
+      case "entrepreneur":
+        return "ИП";
+      case "legal":
+        return "Юр. лицо";
+      default:
+        return "Физ. лицо";
+    }
+  };
+
+  const getCombinedTooltip = (): string => {
+    return `${getModeLabel(responseMode)} ответ · ${getRoleLabel(userRole)}`;
+  };
+
   useEffect(() => {
     if (!userId) return;
 
-    // Вынесено в effect чтобы исключить SSR-инициализацию
     const socketUrl =
       process.env.NEXT_PUBLIC_API_URL || "https://api.rltorg.ru/";
     const s = io(socketUrl, { transports: ["websocket"] });
@@ -55,8 +134,12 @@ export const Messenger = () => {
     s.on("connect", joinRoom);
 
     s.on("messageTextPart", (value: IMessage) => {
-      // Пришёл кусок ответа: обновляем только последний тикет
       setIsLoading(false);
+
+      if (value.role === "user" && sentMessageIds.has(value.id)) {
+        return;
+      }
+
       setIssues((prev) => {
         if (!prev.length) return prev;
         const next = [...prev];
@@ -81,9 +164,8 @@ export const Messenger = () => {
       s.disconnect();
       socketRef.current = null;
     };
-  }, [userId]);
+  }, [userId, sentMessageIds]);
 
-  /** Первая загрузка тикетов пользователя */
   useEffect(() => {
     if (!userId) return;
     (async () => {
@@ -97,7 +179,6 @@ export const Messenger = () => {
     })();
   }, [userId]);
 
-  /** Автозакрытие старых тикетов (иммутабельно) */
   useEffect(() => {
     if (!issues.length) return;
 
@@ -122,27 +203,6 @@ export const Messenger = () => {
     })();
   }, [issues]);
 
-  /** Принудительное закрытие последнего тикета */
-  const handleCloseAndStartNew = useCallback(async () => {
-    if (!lastIssue) return;
-    try {
-      const res = await changeIssueClosingByID(lastIssue.issueId, true);
-      if (res instanceof Error) {
-        message.error("Ошибка. Наши лучшие разработчики уже решают её");
-        return;
-      }
-      setIssues((prev) => {
-        const next = [...prev];
-        next[next.length - 1] = res;
-        return next;
-      });
-      message.success("Текущий тикет закрыт. Можно начать новый.");
-    } catch {
-      message.error("Не удалось закрыть тикет.");
-    }
-  }, [lastIssue]);
-
-  /** Отправка сообщения */
   const sendMessage = useCallback(
     (textRaw?: string) => {
       const text = (textRaw ?? messageValue).trim();
@@ -158,6 +218,8 @@ export const Messenger = () => {
       const newIssueId =
         isLastClosed || !lastIssue ? uid(10) : lastIssue.issueId;
       const messageId = uid(10);
+
+      setSentMessageIds((prev) => new Set(prev).add(messageId));
 
       const optimisticMsg = makeUserMessage({
         text,
@@ -179,7 +241,6 @@ export const Messenger = () => {
           return [...prev, newIssue];
         }
 
-        // Добавляем в существующий последний тикет
         const next = [...prev];
         const li = next[next.length - 1];
         const updated: IIssue = {
@@ -198,14 +259,15 @@ export const Messenger = () => {
         isQuestion: true,
         messageId,
         role: "user",
+        responseMode,
+        userRole, // Добавляем выбранную роль пользователя
       });
 
       setMessageValue("");
     },
-    [userId, messageValue, lastIssue, isLastClosed]
+    [userId, messageValue, lastIssue, isLastClosed, responseMode, userRole]
   );
 
-  /** Сабмит формы (клик по иконке/Enter в инпуте) */
   const onSubmitForm = useCallback(
     (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
@@ -218,20 +280,13 @@ export const Messenger = () => {
     <div className={styles.messenger}>
       <div className={styles.messagesContainer}>
         <MessagesRender issues={issues} />
-
-        {/* {!!issues.length && (
-          <Button
-            onClick={handleCloseAndStartNew}
-            style={{ width: "100%" }}
-            size="middle"
-            type="text"
-          >
-            Кликните, чтобы начать новый тикет
-          </Button>
-        )} */}
       </div>
 
-      <form className={styles.form} onSubmit={onSubmitForm}>
+      <form
+        style={{ userSelect: "none" }}
+        className={styles.form}
+        onSubmit={onSubmitForm}
+      >
         <Input.Search
           value={messageValue}
           onChange={(e) => setMessageValue(e.target.value)}
@@ -240,27 +295,37 @@ export const Messenger = () => {
           placeholder="Задайте свой вопрос"
           size="large"
           variant="borderless"
+          addonBefore={
+            <Dropdown
+              menu={{
+                items: responseModeItems,
+                onClick: handleMenuClick,
+                selectedKeys: [responseMode, `role_${userRole}`],
+              }}
+              trigger={["click"]}
+              placement="topLeft"
+            >
+              <Button
+                size="small"
+                type="text"
+                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+                title={getCombinedTooltip()}
+                className={styles.modeButton}
+              />
+            </Dropdown>
+          }
           enterButton={
             isLoading ? (
-              <button
-                disabled={isLoading}
-                style={{ border: "none", background: "transparent" }}
-              >
-                {" "}
-                <Spin indicator={<LoadingOutlined spin />} size="large" />{" "}
+              <button disabled={isLoading} className={styles.submitButton}>
+                <Spin indicator={<LoadingOutlined spin />} size="small" />
               </button>
             ) : (
               <button className={styles.submitButton}>
-                {" "}
-                <Image
-                  src={PlaneTilt}
-                  width={24}
-                  height={24}
-                  alt="Submit"
-                />{" "}
+                <Image src={PlaneTilt} width={24} height={24} alt="Submit" />
               </button>
             )
           }
+          className={styles.searchInput}
         />
       </form>
     </div>

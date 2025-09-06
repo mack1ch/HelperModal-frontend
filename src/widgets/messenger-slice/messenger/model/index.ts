@@ -74,4 +74,5 @@ export const makeUserMessage = (params: {
   role: "user" as const,
   createdAt: new Date(),
   documents: [],
+  userRating: "like",
 });

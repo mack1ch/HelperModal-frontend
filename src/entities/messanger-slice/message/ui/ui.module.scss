@@ -10,13 +10,23 @@
     align-items: center;
     margin-left: auto;
     max-width: 85%;
+    gap: 8px;
+
     .date {
       font-size: 10px;
       color: #757575;
       margin: 0 5px;
       opacity: 0;
       transition: all 0.3s;
+      white-space: nowrap;
     }
+
+    .messageContent {
+      display: flex;
+      flex-direction: column;
+      max-width: 100%;
+    }
+
     .messageText {
       border-radius: 10px 10px 0 10px;
       padding: 6px 15px;
@@ -25,8 +35,126 @@
       color: #fff;
       font-size: 14px;
       font-weight: 400;
-
       overflow: hidden;
+      word-wrap: break-word;
+
+      // Для коротких сообщений запрещаем перенос
+      &:not([data-long-text]) {
+        white-space: nowrap;
+      }
+
+      // Для длинных сообщений разрешаем перенос
+      &[data-long-text] {
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+
+    .actionButtons {
+      margin-top: 4px;
+      display: flex;
+      gap: 4px;
+      justify-content: flex-start;
+
+      :global(.ant-btn) {
+        font-size: 12px;
+        padding: 2px 6px;
+        height: auto;
+        border: none;
+        background: transparent;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+
+    .copyButton {
+      &:hover {
+        :global(.anticon) {
+          color: #90caf9 !important;
+        }
+      }
+    }
+
+    .activeLike {
+      background-color: #4caf50 !important;
+      border-color: #4caf50 !important;
+      color: white !important;
+
+      &:hover {
+        background-color: #66bb6a !important;
+        border-color: #66bb6a !important;
+      }
+
+      :global(.anticon) {
+        color: white !important;
+      }
+    }
+
+    .activeDislike {
+      background-color: #f44336 !important;
+      border-color: #f44336 !important;
+      color: white !important;
+
+      &:hover {
+        background-color: #ef5350 !important;
+        border-color: #ef5350 !important;
+      }
+
+      :global(.anticon) {
+        color: white !important;
+      }
+    }
+  }
+}
+
+// Стили для сообщений AI/operator (не наших)
+.messageWrap:has(.message:not([style*="margin-left: auto"])) {
+  justify-content: flex-start;
+
+  .message {
+    margin-left: 0;
+    margin-right: auto;
+    flex-direction: row-reverse;
+
+    .messageText {
+      border-radius: 10px 10px 10px 0;
+      background-color: #eee;
+      color: #222;
+    }
+
+    .actionButtons {
+      justify-content: flex-end;
+
+      :global(.ant-btn) {
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+      }
+    }
+
+    .copyButton {
+      &:hover {
+        :global(.anticon) {
+          color: #1d85d0 !important;
+        }
+      }
+    }
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 768px) {
+  .messageWrap {
+    .message {
+      max-width: 90%;
+
+      .messageText {
+        // На мобильных всегда разрешаем перенос для удобства чтения
+        white-space: normal !important;
+        word-break: break-word;
+      }
     }
   }
 }

@@ -292,7 +292,7 @@ export function useMessenger({ userId }: Params) {
         issueId: newIssueId,
         createdAt: new Date(),
         role: "user",
-        userRating: "like",
+        userReaction: undefined,
         isShortAnswer: isShortByMode(responseMode),
         companyType,
       };

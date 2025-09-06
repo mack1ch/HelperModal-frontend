@@ -14,9 +14,9 @@
     "antd": "^5.18.1",
     "axios": "^1.7.2",
     "next": "^14.2.4",
-    "react": "^18.3.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-cookie": "^7.1.4",
-    "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "rehype-highlight": "^7.0.0",
     "sass": "^1.77.5",
@@ -31,5 +31,6 @@
     "eslint": "^8",
     "eslint-config-next": "^14.2.4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
 }

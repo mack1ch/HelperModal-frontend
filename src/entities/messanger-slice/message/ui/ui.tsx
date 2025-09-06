@@ -2,55 +2,75 @@
 
 import { IMessage } from "@/shared/interface/message";
 import styles from "./ui.module.scss";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { formatTimeToHHMMFormat } from "@/shared/lib/parce/time";
 import { Button, Space, Tooltip, message as antMessage } from "antd";
 import { DislikeOutlined, LikeOutlined, CopyOutlined } from "@ant-design/icons";
+import { rateMessage, UserReaction } from "../api";
 
-export const Message = ({
-  message,
-  onRateMessage,
-}: {
-  message?: IMessage;
-  onRateMessage?: (messageId: string, rating: "like" | "dislike") => void;
-}) => {
-  const [isHover, setIsHover] = useState<boolean>(false);
+export const Message = ({ message }: { message?: IMessage }) => {
+  const [isHover, setIsHover] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [localRating, setLocalRating] = useState<"like" | "dislike" | null>(
-    message?.userRating || null
+    message?.userReaction || null
   );
 
-  const isNotMessageMine: boolean =
-    message?.role == "AI" || message?.role == "operator";
+  const isNotMessageMine = message?.role == "AI" || message?.role == "operator";
+  const shouldWrapText = message?.text && message.text.length > 30;
 
-  // Определяем, нужно ли переносить текст
-  const shouldWrapText = message?.text && message.text.length > 30; // Переносим если больше 30 символов
+  const sendReaction = useCallback(
+    async (userReaction?: UserReaction) => {
+      if (!message?.id || !message.issueId || !message.authorId) return;
+      try {
+        setIsSending(true);
+        await rateMessage({
+          messageId: message.id,
+          issueId: message.issueId,
+          authorId: message.authorId,
+          userReaction,
+        });
+      } finally {
+        setIsSending(false);
+      }
+    },
+    [message?.id, message?.issueId, message?.authorId]
+  );
 
-  const handleRate = (rating: "like" | "dislike") => {
+  const handleRate = async (rating: "like" | "dislike") => {
     if (!message?.id) return;
-
+    const prev = localRating;
     setLocalRating(rating);
-
-    if (onRateMessage) {
-      onRateMessage(message.id, rating);
-    } else {
-      antMessage.success(`Оценка "${rating}" отправлена`);
+    console.log(rating);
+    try {
+      await sendReaction(rating);
+    } catch (err) {
+      setLocalRating(prev);
+      antMessage.error("Не удалось отправить оценку");
+      console.error(err);
     }
   };
 
-  const handleRemoveRating = () => {
+  const handleRemoveRating = async () => {
+    const prev = localRating;
     setLocalRating(null);
-    antMessage.info("Оценка удалена");
+
+    try {
+      await sendReaction(undefined);
+    } catch (err) {
+      setLocalRating(prev);
+      antMessage.error("Не удалось удалить оценку");
+      console.error(err);
+    }
   };
 
   const handleCopyText = async () => {
     if (!message?.text) return;
-
     try {
       await navigator.clipboard.writeText(message.text);
       antMessage.success("Текст скопирован в буфер обмена");
     } catch (err) {
       antMessage.error("Не удалось скопировать текст");
-      console.error("Ошибка копирования:", err);
+      console.error(err);
     }
   };
 
@@ -76,24 +96,24 @@ export const Message = ({
             style={{
               backgroundColor: !isNotMessageMine ? undefined : "#eee",
               color: !isNotMessageMine ? undefined : "#222",
-              whiteSpace: shouldWrapText ? "normal" : "nowrap", // Перенос только для длинных текстов
+              whiteSpace: shouldWrapText ? "normal" : "nowrap",
             }}
             className={styles.messageText}
           >
             {message?.text}
           </p>
 
-          {/* Кнопки действий - показываем только для AI сообщений */}
           {message?.role === "AI" && (
             <Space
               size="small"
               className={styles.actionButtons}
               style={{
                 justifyContent: isNotMessageMine ? "flex-start" : "flex-end",
-                marginTop: "8px",
+                marginTop: 8,
+                opacity: isSending ? 0.6 : 1,
+                pointerEvents: isSending ? "none" : "auto",
               }}
             >
-              {/* Кнопка копирования */}
               <Tooltip title="Скопировать">
                 <Button
                   type="text"
@@ -103,35 +123,36 @@ export const Message = ({
                   className={styles.copyButton}
                 />
               </Tooltip>
-              {/* Кнопки лайков/дизлайков */}
+
               <Tooltip title="Ответ понравился">
                 <Button
                   type={localRating === "like" ? "primary" : "text"}
                   size="small"
                   ghost
+                  className={localRating == "like" ? styles.activeDislike : ""}
                   icon={<LikeOutlined style={{ color: "#757575" }} />}
                   onClick={() =>
                     localRating === "like"
                       ? handleRemoveRating()
                       : handleRate("like")
                   }
-                  className={localRating === "like" ? styles.activeLike : ""}
                 />
               </Tooltip>
+
               <Tooltip title="Ответ не понравился">
                 <Button
                   type={localRating === "dislike" ? "primary" : "text"}
                   size="small"
                   icon={<DislikeOutlined style={{ color: "#757575" }} />}
+                  className={
+                    localRating == "dislike" ? styles.activeDislike : ""
+                  }
                   onClick={() =>
                     localRating === "dislike"
                       ? handleRemoveRating()
                       : handleRate("dislike")
                   }
                   danger={localRating === "dislike"}
-                  className={
-                    localRating === "dislike" ? styles.activeDislike : ""
-                  }
                 />
               </Tooltip>
             </Space>

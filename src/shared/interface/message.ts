@@ -6,7 +6,7 @@ export interface IMessage {
   issueId: string;
   authorId: string;
   role: "AI" | "operator" | "user";
-  userRating: "like" | "dislike";
+  userReaction: "like" | "dislike" | undefined;
   isShortAnswer: boolean;
   companyType: "physic" | "msp" | "big_company";
 }
@@ -14,5 +14,6 @@ export interface IMessage {
 export interface IDocument {
   fileLink?: string;
   page?: number;
+  link?: string;
   title?: string;
 }

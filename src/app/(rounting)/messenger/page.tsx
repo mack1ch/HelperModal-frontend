@@ -17,7 +17,7 @@ export default function Home() {
         <Header
           style={{ position: "fixed" }}
           leftIcon={
-            <IconWrap onClick={() => router.back()} image={CaretLeft} />
+            <IconWrap onClick={() => router.replace("/")} image={CaretLeft} />
           }
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>

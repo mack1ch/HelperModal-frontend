@@ -15,7 +15,7 @@ export const Phone = () => {
             В чате ответим быстрее -
             <Button
               icon={<MessageOutlined />}
-              onClick={() => router.push("/messenger")}
+              onClick={() => router.replace("/messenger")}
               size="small"
               type="link"
             >

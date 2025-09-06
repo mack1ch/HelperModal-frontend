@@ -13,26 +13,22 @@ import { useEffect } from "react";
 
 export default function Home() {
   const [cookies, setCookie] = useCookies(["user-id"]);
-  const isDevMode = process.env.NODE_ENV !== "production";
+
   useEffect(() => {
-    if (cookies["user-id"]) {
-    } else {
+    if (!cookies["user-id"]) {
       setCookie("user-id", uid(16), {
-        secure: true,
-        domain: isDevMode
-          ? process.env.DEV_MODAL_LINK
-          : process.env.PRODUCTION_MODAL_LINK,
-        sameSite: "none",
+        path: "/", // доступно во всем приложении
+        secure: process.env.NODE_ENV === "production", // только в https в проде
+        sameSite: "lax", // "none" работает только с secure
       });
     }
-  }, []);
+  }, [cookies, setCookie]);
+
   return (
-    <>
-      <AppLayout>
-        <Header leftIcon={<IconWrap image={Bell} />}>Центр поддержки</Header>
-        <Main />
-        <Footer />
-      </AppLayout>
-    </>
+    <AppLayout>
+      <Header leftIcon={<IconWrap image={Bell} />}>Центр поддержки</Header>
+      <Main />
+      <Footer />
+    </AppLayout>
   );
 }

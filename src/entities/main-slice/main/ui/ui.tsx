@@ -34,7 +34,7 @@ export const Main = () => {
           </p>
           <div className={styles.btns}>
             <button
-              onClick={() => router.push("/messenger")}
+              onClick={() => router.replace("/messenger")}
               className={styles.mainBtn}
             >
               <Image src={Chat} width={20} height={20} alt="Chat" />

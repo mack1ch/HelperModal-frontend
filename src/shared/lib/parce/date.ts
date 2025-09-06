@@ -37,3 +37,13 @@ export function formatDateToDDMMYYYY(dateValue: Date): string {
 
   return `${dayString}.${monthString}.${year}`;
 }
+
+export const toDateSafe = (v: unknown) => {
+  const d = new Date(v as any);
+  return isNaN(+d) ? new Date() : d;
+};
+
+export const toDateStrict = (v: unknown): Date => {
+  const d = new Date(v as any);
+  return isNaN(+d) ? new Date() : d;
+};

@@ -1,5 +1,7 @@
 import { IIssue } from "@/shared/interface/issue";
 import { IMessage } from "@/shared/interface/message";
+import { toDateSafe } from "@/shared/lib/parce/date";
+import { io, Socket } from "socket.io-client";
 
 const ONE_HOUR = 60 * 60 * 1000; // in milliseconds
 
@@ -61,18 +63,17 @@ export const appendOrMergeMessage = (
   return next;
 };
 
-export const makeUserMessage = (params: {
-  text: string;
-  authorId: string;
-  issueId: string;
-  messageId: string;
-}): IMessage => ({
-  id: params.messageId,
-  text: params.text,
-  issueId: params.issueId,
-  authorId: params.authorId,
-  role: "user" as const,
-  createdAt: new Date(),
-  documents: [],
-  userRating: "like",
+export const normalizeIssue = (i: IIssue): IIssue => ({
+  ...i,
+  createdAt: i.createdAt ? toDateSafe(i.createdAt) : undefined,
+  updatedAt: i.updatedAt ? toDateSafe(i.updatedAt) : undefined,
+  messages: (i.messages ?? []).map((m) => ({
+    ...m,
+    createdAt: toDateSafe(m.createdAt),
+  })),
 });
+
+export function createSocket(): Socket {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.rltorg.ru/";
+  return io(API_URL, { transports: ["websocket"] });
+}

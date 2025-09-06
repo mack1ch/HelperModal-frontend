@@ -6,7 +6,9 @@ export interface IMessage {
   issueId: string;
   authorId: string;
   role: "AI" | "operator" | "user";
-  userRating: 'like' | 'dislike'
+  userRating: "like" | "dislike";
+  isShortAnswer: boolean;
+  companyType: "physic" | "msp" | "big_company";
 }
 
 export interface IDocument {

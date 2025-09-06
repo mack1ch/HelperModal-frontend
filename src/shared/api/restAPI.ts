@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const BASE_URL = "https://api.rltorg.ru/";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetcher = (url: string) =>
   fetch(BASE_URL + url, {

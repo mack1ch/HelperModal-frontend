@@ -30,7 +30,7 @@ export const SearchRender = ({ searchValue }: { searchValue?: string }) => {
             <div className={styles.header}>
               Уточните запрос, или напишите в{" "}
               <Button
-                onClick={() => router.push("/messenger")}
+                onClick={() => router.replace("/messenger")}
                 type="link"
                 icon={<MessageOutlined />}
                 size="small"

@@ -1,5 +1,13 @@
-import { AppstoreOutlined, HourglassOutlined, MonitorOutlined, ShopOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
-import { MenuProps } from "antd"
+import {
+  AppstoreOutlined,
+  HourglassOutlined,
+  MonitorOutlined,
+  ShopOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { MenuProps } from "antd";
+import { ResponseMode, UserRole } from "../types";
 
 export const responseModeItems: MenuProps["items"] = [
   {
@@ -21,18 +29,28 @@ export const responseModeItems: MenuProps["items"] = [
     type: "divider",
   },
   {
-    key: "role_individual",
+    key: "physic",
     label: "Физ. лицо",
     icon: <UserOutlined style={{ fontSize: "16px" }} />,
   },
   {
-    key: "role_entrepreneur",
-    label: "ИП",
+    key: "msp",
+    label: "МСП",
     icon: <ShopOutlined style={{ fontSize: "16px" }} />,
   },
   {
-    key: "role_legal",
-    label: "Юр. лицо",
+    key: "big_company",
+    label: "Крупный поставщик",
     icon: <TeamOutlined style={{ fontSize: "16px" }} />,
   },
 ];
+
+export const getModeLabel = (mode: ResponseMode) =>
+  mode === "short"
+    ? "Короткий"
+    : mode === "detailed"
+    ? "Развернутый"
+    : "Автоматический";
+
+export const getRoleLabel = (role: UserRole) =>
+  role === "entrepreneur" ? "ИП" : role === "legal" ? "Юр. лицо" : "Физ. лицо";

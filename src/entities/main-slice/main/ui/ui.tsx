@@ -44,7 +44,7 @@ export const Main = () => {
               <Image src={WhatsApp} width={32} height={32} alt="Chat" />
             </button>
             <button
-              onClick={() => router.push("https://t.me/oneformestudio")}
+              onClick={() => router.push("https://t.me/GlebBondarchuk")}
               className={styles.telegram}
             >
               <Image src={Telegram} width={32} height={32} alt="Chat" />

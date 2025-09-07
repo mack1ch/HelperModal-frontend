@@ -43,23 +43,20 @@ export const PDFViewerComponent = ({
               {documents?.map((item, index) => {
                 if (item.fileLink) {
                   return (
-                    <>
-                      <Tooltip title={item.title} key={index}>
-                        <button
-                          onClick={() => handleDocumentIDChange(index)}
-                          style={{
-                            width: `calc(100% / ${documents.length} - 8px)`,
-                            background:
-                              index === selectedDocumentID ? "#333" : "#fff",
-                            color:
-                              index === selectedDocumentID ? "#fff" : "#222",
-                          }}
-                          className={styles.chip}
-                        >
-                          Документ № {index + 1}, страница {item.page! + 1}
-                        </button>
-                      </Tooltip>
-                    </>
+                    <Tooltip title={item.title} key={index}>
+                      <button
+                        onClick={() => handleDocumentIDChange(index)}
+                        style={{
+                          width: `calc(100% / ${documents.length} - 8px)`,
+                          background:
+                            index === selectedDocumentID ? "#333" : "#fff",
+                          color: index === selectedDocumentID ? "#fff" : "#222",
+                        }}
+                        className={styles.chip}
+                      >
+                        Документ № {index + 1}, страница {item.page! + 1}
+                      </button>
+                    </Tooltip>
                   );
                 } else if (item.link) {
                   return (

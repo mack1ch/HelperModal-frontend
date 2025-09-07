@@ -1,8 +1,8 @@
 import { PageLayout } from "@/shared/layouts/pageLayout";
 import styles from "./ui.module.scss";
 import { Avatar } from "antd";
-import Avatar1 from "../../../../../public/assets/avatars/techUser_1.jpg";
-import Avatar2 from "../../../../../public/assets/avatars/techUser_2.jpg";
+import Avatar1 from "../../../../../public/assets/avatars/techUser_1.webp";
+import Avatar2 from "../../../../../public/assets/avatars/techUser_2.webp";
 import Avatar3 from "../../../../../public/assets/avatars/techUser_3.jpg";
 import Avatar4 from "../../../../../public/assets/avatars/techUser_4.jpg";
 import Image from "next/image";
@@ -25,9 +25,9 @@ export const Main = () => {
         <main className={styles.mainWrap}>
           <Avatar.Group>
             <Avatar size="large" src={Avatar1.src} />
+            <Avatar size="large" src={Avatar4.src} />
             <Avatar size="large" src={Avatar2.src} />
             <Avatar size="large" src={Avatar3.src} />
-            <Avatar size="large" src={Avatar4.src} />
           </Avatar.Group>
           <p className={styles.p}>
             Мы в сети и готовы помочь в течение нескольких минут
